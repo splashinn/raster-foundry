@@ -1,24 +1,21 @@
 package com.azavea.rf.batch
 
-import io.circe.parser.parse
-import cats.implicits._
-import com.typesafe.scalalogging.LazyLogging
+import java.io._
+import java.net._
+import java.util.Scanner
 
+import cats.implicits._
+import com.amazonaws.services.s3.{AmazonS3ClientBuilder, AmazonS3URI}
 import geotrellis.raster.io.geotiff.reader.TiffTagsReader
 import geotrellis.raster.io.geotiff.tags.TiffTags
 import geotrellis.spark.io.s3.AmazonS3Client
 import geotrellis.spark.io.s3.util.S3RangeReader
-
-import com.amazonaws.auth._
-import com.amazonaws.services.s3.{AmazonS3URI, AmazonS3Client => AWSAmazonS3Client}
+import io.circe.parser.parse
 import org.apache.commons.io.IOUtils
 import org.apache.hadoop.conf.Configuration
 
-import java.util.Scanner
-import java.io._
-import java.net._
+package object util {
 
-package object util extends LazyLogging {
   implicit class ConfigurationMethods(conf: Configuration) {
     def isKeyUnset(key: String): Boolean = conf.get(key) == null
   }
@@ -44,8 +41,8 @@ package object util extends LazyLogging {
     case "file" =>
       TiffTagsReader.read(uri.toString)
     case "s3" | "https" | "http" =>
-      val s3Uri = new AmazonS3URI(java.net.URLDecoder.decode(uri.toString, "UTF-8"))
-      val s3Client = new AmazonS3Client(new AWSAmazonS3Client(new DefaultAWSCredentialsProviderChain))
+      val s3Uri = new AmazonS3URI(uri)
+      val s3Client = new AmazonS3Client(new AWSAmazonS3Client())
       val s3RangeReader = S3RangeReader(s3Uri.getBucket, s3Uri.getKey, s3Client)
       TiffTagsReader.read(s3RangeReader)
     case _ =>
@@ -66,7 +63,7 @@ package object util extends LazyLogging {
     case "http" | "https" =>
       uri.toURL.openStream
     case "s3" =>
-      val client = new AWSAmazonS3Client(new DefaultAWSCredentialsProviderChain)
+      val client = AmazonS3ClientBuilder.defaultClient()
       val s3uri = new AmazonS3URI(uri)
       client.getObject(s3uri.getBucket, s3uri.getKey).getObjectContent
     case _ =>
@@ -76,8 +73,9 @@ package object util extends LazyLogging {
   def combineUris(targetName: URI, prefix: URI): URI = {
     targetName.getScheme match {
       case "file" | "http" | "https" | "s3" => targetName
-      case _ => if (prefix.toString.endsWith("/")) new URI(prefix.toString + targetName.toString)
-                else new URI(prefix.toString + "/" + targetName.toString)
+      case _ =>
+        if (prefix.toString.endsWith("/")) new URI(prefix.toString + targetName.toString)
+        else new URI(prefix.toString + "/" + targetName.toString)
     }
   }
 
