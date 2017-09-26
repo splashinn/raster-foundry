@@ -1,8 +1,8 @@
 package com.azavea.rf.common.cache.kryo
 
+import com.twitter.chill.ScalaKryoInstantiator
 import net.spy.memcached.CachedData
 import net.spy.memcached.transcoders.Transcoder
-import com.twitter.chill.ScalaKryoInstantiator
 
 /** The KryoTranscoder provides conversion between (kryo serialized) byte arrays and jvm objects */
 class KryoTranscoder extends Transcoder[AnyRef] {
