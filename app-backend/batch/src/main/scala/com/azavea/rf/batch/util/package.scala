@@ -6,6 +6,7 @@ import java.nio.charset.Charset
 
 import cats.implicits._
 import com.amazonaws.services.s3.{AmazonS3ClientBuilder, AmazonS3URI}
+import com.typesafe.scalalogging.LazyLogging
 import geotrellis.raster.io.geotiff.reader.TiffTagsReader
 import geotrellis.raster.io.geotiff.tags.TiffTags
 import geotrellis.spark.io.s3.AmazonS3Client
@@ -14,7 +15,7 @@ import io.circe.parser.parse
 import org.apache.commons.io.IOUtils
 import org.apache.hadoop.conf.Configuration
 
-package object util {
+package object util extends LazyLogging {
 
   implicit class ConfigurationMethods(conf: Configuration) {
     def isKeyUnset(key: String): Boolean = conf.get(key) == null

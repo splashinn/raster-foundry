@@ -1,5 +1,6 @@
 package com.azavea.rf.common
 
+import java.io.File
 import java.net._
 import java.time.{Duration, ZoneOffset}
 import java.util.Date
@@ -69,7 +70,7 @@ package object S3 {
             getSignedUrl(bucket, key, duration)
           } ::: accumulator
 
-      if(!listing.isTruncated) getObjects
+      if (!listing.isTruncated) getObjects
       else get(client.listNextBatchOfObjects(listing), getObjects)
     }
 
@@ -95,7 +96,7 @@ package object S3 {
           .filterNot(_.getKey.endsWith("/"))
           .map(_.getKey.split("/").last) ::: accumulator
 
-      if(!listing.isTruncated) getObjects
+      if (!listing.isTruncated) getObjects
       else get(client.listNextBatchOfObjects(listing), getObjects)
     }
 
@@ -121,7 +122,7 @@ package object S3 {
           .filterNot(_.getKey.endsWith("/"))
           .map(os => "s3://" + os.getBucketName + "/" + os.getKey) ::: accumulator
 
-      if(!listing.isTruncated) getObjects
+      if (!listing.isTruncated) getObjects
       else get(client.listNextBatchOfObjects(listing), getObjects)
     }
 
