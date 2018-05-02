@@ -43,7 +43,7 @@ package object util extends LazyLogging {
       TiffTagsReader.read(uri.toString)
     case "s3" | "https" | "http" =>
       val s3Uri = new AmazonS3URI(uri)
-      val s3Client = new AmazonS3Client(new AWSAmazonS3Client())
+      val s3Client = new AmazonS3Client(AmazonS3ClientBuilder.defaultClient())
       val s3RangeReader = S3RangeReader(s3Uri.getBucket, s3Uri.getKey, s3Client)
       TiffTagsReader.read(s3RangeReader)
     case _ =>
