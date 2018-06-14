@@ -13,8 +13,17 @@ const OrganizationModalComponent = {
 };
 
 class OrganizationModalController {
-    constructor() {
+    constructor($timeout, $element) {
+        this.$timeout = $timeout;
+        this.$element = $element;
         this.permissionDenied = this.resolve.permissionDenied;
+    }
+
+    $postLink() {
+        this.$timeout(() => {
+            const el = $(this.$element[0]).find('input').get(0);
+            el.focus();
+        }, 0);
     }
 
     onAdd() {
