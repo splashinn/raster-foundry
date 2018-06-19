@@ -67,7 +67,7 @@ node{
                                                 url: 'https://github.com/azavea/raster-foundry-deployment.git']]]
 
             def slackMessage = ":rasterfoundry: production deployment in progress"
-            slackSend color: 'warning', message: slackMessage
+            slackSend color: 'warning', message: slackMessage, channel: "@tnation"
 
             dir('raster-foundry-deployment') {
               wrap([$class: 'AnsiColorBuildWrapper']) {
