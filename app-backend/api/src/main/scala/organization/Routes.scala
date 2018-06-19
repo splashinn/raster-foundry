@@ -41,6 +41,10 @@ trait OrganizationRoutes extends Authentication
             post { addOrganizationLogo(orgId) }
           }
         }
+    } ~ pathPrefix("search") {
+      pathEndOrSingleSlash {
+        get { searchOrganizations() }
+      }
     }
   }
 
@@ -48,6 +52,14 @@ trait OrganizationRoutes extends Authentication
     rejectEmptyResponse {
       complete {
         OrganizationDao.query.filter(orgId).selectOption.transact(xa).unsafeToFuture()
+      }
+    }
+  }
+
+  def searchOrganizations(): Route = authenticate { user =>
+    searchParams { (searchParams)  =>
+      complete {
+        OrganizationDao.searchOrganizations(user, searchParams).transact(xa).unsafeToFuture
       }
     }
   }
