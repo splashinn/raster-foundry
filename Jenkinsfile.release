@@ -81,5 +81,7 @@ node{
         def slackMessage = ":jenkins-angry: *Deployment #${env.BUILD_NUMBER} of (${env.BRANCH_NAME})* has failed"
         slackMessage += "\n<${env.BUILD_URL}|View Build>"
         slackSend color: 'danger', message: slackMessage
+
+        throw err
       }
 }
