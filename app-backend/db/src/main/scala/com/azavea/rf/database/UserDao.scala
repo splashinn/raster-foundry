@@ -207,6 +207,5 @@ object UserDao extends Dao[User] {
     UserDao.viewFilter(user)
       .filter(searchParams)
       .list(0, 5, fr"order by name")
-    // TODO use thin user objects not full user.
   }
 }
