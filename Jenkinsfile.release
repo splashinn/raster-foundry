@@ -12,7 +12,7 @@ def retagImage(String image_url, String source_tag, String dest_tag) {
 node{
    properties(
        [parameters(
-           [string(defaultValue: 'develop', description: 'SHA of the commit you wish to deploy.', name: 'GIT_COMMIT', trim: false),
+           [string(defaultValue: 'develop', description: 'First 7 characters of the SHA for the commit you wish to deploy.', name: 'GIT_COMMIT', trim: false),
             string(defaultValue: 'tnation-test', description: 'Tag of the Current release.', name: 'RELEASE_TAG', trim: false),
             string(defaultValue: 'rasterfoundry-staging-docs-site-us-east-1', description: 'Location of swagger spec.', name: 'RF_DOCS_BUCKET', trim: false),
             string(defaultValue: 'rasterfoundry-staging-config-us-east-1', description: 'Location of terraform state & vars files.', name: 'RF_SETTINGS_BUCKET', trim: false),
