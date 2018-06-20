@@ -76,9 +76,12 @@ node{
                 sh 'docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --rm terraform ./scripts/infra plan'
               }
             }
+
+            slackMessage = ":rasterfoundry: production deployment is complete"
+            slackSend color: 'warning', message: slackMessage, channel: "@tnation"
         }
       } catch(err) {
-        def slackMessage = ":jenkins-angry: *Deployment #${env.BUILD_NUMBER} of (${env.BRANCH_NAME})* has failed"
+        def slackMessage = ":jenkins-angry: *Deployment #${env.BUILD_NUMBER} of release/hotfix ${params.RELEASE_TAG} has failed*"
         slackMessage += "\n<${env.BUILD_URL}|View Build>"
         slackSend color: 'danger', message: slackMessage
 
